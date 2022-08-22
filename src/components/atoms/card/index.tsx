@@ -21,7 +21,7 @@ function CardWithTextOverImage({item, onPress }) {
                 overflow: "hidden"}}>
                 <View style={[styles.container]}>
                     <Image
-                        source={item?.image?.url ? require(`./../../../../assets/png/steel/image 10.png`) :require("../../../../assets/logo.png")}
+                        source={item?.image?.url ? {url: item?.image.url} :require("../../../../assets/logo.png")}
                         style={{
                             width:'100%',
                             height: 100,
