@@ -122,36 +122,61 @@ let data = {
             id: '13',
             data_id: "6",
             title: 'Frosted Glass',
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/glass/image3-2-1024x900-removebg-preview%201.png?raw=true"
+            }
         },
         {
             id: '14',
             data_id: "6",
             title: 'Insulated Glass',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/glass/image5-8-1024x882-removebg-preview%201.png?raw=true'
+            }
         },
         {
             id: '15',
             data_id: "6",
             title: 'Tempered Glass',
+            image:{
+                url:'https://github.com/edward1986/SS/blob/master/assets/png/glass/image7-3-1024x832-removebg-preview%201.png?raw=true'
+            }
         },{
             id: '16',
             data_id: "6",
             title: 'Plexiglass',
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/glass/f5311a964c613653951a975fdbbdd487-removebg-preview%201.png?raw=true"
+            }
         },{
             id: '17',
             data_id: "6",
             title: 'Laminated Glass',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/glass/e9568a6c5f578f3c8e891d0f0650fc8d-removebg-preview%201.png?raw=true'
+            }
+
         },{
             id: '18',
             data_id: "6",
             title: 'Mirror glass',
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/glass/image%2016.png?raw=true"
+            }
         },{
             id: '19',
             data_id: "6",
             title: 'Glass x',
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/glass/image3-2-1024x900-removebg-preview%201.png?raw=true"
+            }
         },{
             id: '20',
             data_id: "6",
             title: 'Glass x',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/glass/image5-8-1024x882-removebg-preview%201.png?raw=true'
+            }
         },
     ],
     "homeBanner": [
