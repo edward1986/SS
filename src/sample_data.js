@@ -77,28 +77,46 @@ let data = {
             id: '7',
             data_id: "3",
             title: 'Plywood',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/lumber/kikcnowjcodj-removebg-preview%201.png?raw=true'
+            }
         },
         {
             id: '8',
             data_id: "3",
             title: 'Ficem board ',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/lumber/image%2013.png?raw=true'
+            }
         },
         {
             id: '9',
             data_id: "3",
             title: 'Saw dust',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/lumber/1200x-1-removebg-preview%201.png?raw=true'
+            }
         },{
             id: '10',
             data_id: "3",
             title: 'Coco Lumber',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/lumber/image%2015.png?raw=true'
+            }
         },{
             id: '11',
             data_id: "3",
             title: 'Lumber x',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/lumber/kikcnowjcodj-removebg-preview%201.png?raw=true'
+            }
         },{
             id: '12',
             data_id: "3",
             title: 'Lumber x',
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/lumber/image%2013.png?raw=true'
+            }
         },
         {
             id: '13',
