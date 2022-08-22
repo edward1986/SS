@@ -6,6 +6,7 @@ import { store, persistor } from './src/services/store';
 import Navigation from './src/navigations';
 import useCachedResources from "./src/hooks/useCachedResources";
 import {useColorScheme} from "react-native";
+import { ThemeProvider } from '@td-design/react-native';
 export default function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
@@ -14,12 +15,14 @@ export default function App() {
         return null;
     } else {
         return (
+            <ThemeProvider>
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
                     <Navigation/>
                     <StatusBar/>
                 </PersistGate>
             </Provider>
+            </ThemeProvider>
         );
     }
 }

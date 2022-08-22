@@ -9,6 +9,7 @@ import CupertinoSearchBar from "../../components/atoms/cupertinoSearchBar/Cupert
 import CardWithTextOverImage from "../../components/atoms/card";
 import Text from '../../components/atoms/text'
 import {Bold} from "../../styles/fonts";
+import data from "../../sample_data";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -47,41 +48,6 @@ backgroundColor: "#E4E3DF",
 });
 
 const Home = ({ navigation }:any) => {
-  const dispatch = useDispatch();
-  const [showAlert, setShowAlert] = useState(false);
-  const user = useSelector((state: RootStateOrAny) => state.user);
-  const onLogout = useCallback(() => {
-    onHide();
-    dispatch(setUser({}));
-    setTimeout(() => {
-      navigation.replace('Login');
-    }, 100);
-  }, []);
-
-  const onHide = () => setShowAlert(false)
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'Steel',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Masonry',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Lumber',
-    },{
-      id: '58694a0f-3da1-471f-bd96-145571e29d12',
-      title: 'Tilework',
-    },{
-      id: '58694a0f-3da1-471f-bd96-145571e29312',
-      title: 'Plumbing',
-    },{
-      id: '58694a0f-3da1-471f-bd96-145571e29312',
-      title: 'Glass',
-    },
-  ];
 
   function listHeaderComponent() {
     return <View style={{justifyContent: "center",
@@ -99,6 +65,9 @@ const Home = ({ navigation }:any) => {
     </View>
   }
 
+  const cardOnPress = (item) => {
+    return navigation.navigate('SubItems', item )
+  };
   return (
     <View  style={[styles.container]}>
 
@@ -109,35 +78,13 @@ const Home = ({ navigation }:any) => {
             contentContainerStyle={{paddingHorizontal:  10, paddingBottom: 20}}
             ListHeaderComponent={listHeaderComponent()}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
-            data={DATA}
+            data={data.DATA}
             numColumns={2}
-            renderItem={CardWithTextOverImage}
+            renderItem={(props) => CardWithTextOverImage({item:props.item, onPress: cardOnPress})}
             keyExtractor={item => item.id}
         />
 
 
-      <AwesomeAlert
-        show={showAlert}
-        showProgress={false}
-        titleStyle={styles.alertMessage}
-        title={'Are you sure you would\nlike to log out?'}
-        contentStyle={styles.contentStyle}
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={true}
-        showConfirmButton={true}
-        cancelText="Yes"
-        confirmText="No"
-        confirmButtonColor={'white'}
-        cancelButtonColor={button.primary}
-        confirmButtonStyle={styles.cancelButton}
-        confirmButtonTextStyle={styles.cancelText}
-        cancelButtonStyle={styles.confirmButton}
-        cancelButtonTextStyle={styles.confirmText}
-        actionContainerStyle={styles.actionContainerStyle}
-        onCancelPressed={onLogout}
-        onConfirmPressed={onHide}
-      />
     </View>
   );
 };

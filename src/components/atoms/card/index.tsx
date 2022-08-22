@@ -1,41 +1,44 @@
-import React, { Component } from "react";
+import React, {Component, useMemo} from "react";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Text from './../../atoms/text'
 import {Bold} from "../../../styles/fonts";
-function CardWithTextOverImage({item}) {
+function CardWithTextOverImage({item, onPress }) {
     return (
-        <View style={{flex: 1, borderWidth: 1,
-            borderRadius: 10,
-            borderColor: "#CCC",
-            backgroundColor: "#B8B89C",
-            shadowColor: "#000",
-            shadowOffset: {
-                width: -2,
-                height: 2
-            },
-            margin: 5,
-            shadowOpacity: 0.1,
-            shadowRadius: 1.5,
-            elevation: 3,
-            overflow: "hidden"}}>
-            <View style={[styles.container]}>
-                <Image
-                    source={require("../../../../assets/logo.png")}
-                    style={{
-                        width:'100%',
-                        height: 100,
-                    }}
-                    resizeMode="contain"
-                />
+        <TouchableOpacity onPress={()=>onPress(item)} style={{flex: 1}}>
+            <View style={{flex: 1, borderWidth: 1,
+                borderRadius: 10,
+                borderColor: "#CCC",
+                backgroundColor: "#B8B89C",
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: -2,
+                    height: 2
+                },
+                margin: 5,
+                shadowOpacity: 0.1,
+                shadowRadius: 1.5,
+                elevation: 3,
+                overflow: "hidden"}}>
+                <View style={[styles.container]}>
+                    <Image
+                        source={item?.image?.url ? require(`./../../../../assets/png/steel/image 10.png`) :require("../../../../assets/logo.png")}
+                        style={{
+                            width:'100%',
+                            height: 100,
+                        }}
+                        resizeMode="contain"
+                    />
 
 
-            </View>
-            <View>
+                </View>
+                <View>
                     <View style={styles.bodyContent}>
                         <Text style={styles.titleStyle}>{item.title}</Text>
                     </View>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
+
 
 
     );

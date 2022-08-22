@@ -11,6 +11,7 @@ import MapsIcon from "../../../assets/svg/mapsicon";
 import ProfileIcon from "../../../assets/svg/profileIcon";
 import CupertinoSearchBar from "../../components/atoms/cupertinoSearchBar/CupertinoSearchBar";
 import Drawer from "./Drawer";
+import Stack from "./Stack";
 
 const Tab = createBottomTabNavigator();
 
@@ -119,11 +120,11 @@ const HomeNavigator = () => {
             }}
 
             tabBar={props => <MyTabBar {...props} />}
-            initialRouteName="Home"
+            initialRouteName="Stack"
         >
 
 
-            <Tab.Screen name="Home" component={Home}/>
+            <Tab.Screen name="Home" component={Stack}/>
             <Tab.Screen name="Notification" component={Notifications}/>
             <Tab.Screen name="Maps" component={Maps}/>
             <Tab.Screen name="Profile" component={Profile}/>
