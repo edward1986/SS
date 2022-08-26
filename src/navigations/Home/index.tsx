@@ -57,7 +57,7 @@ function MyTabBar({state, descriptors, navigation}) {
                     });
                 };
                 const focused = "#2863D6";
-                const unfocused = "#606A80";
+                    const unfocused = "#606A80";
                 return (
                     <View key={route.key} style={{flex: 1}}>
                         <TouchableOpacity
