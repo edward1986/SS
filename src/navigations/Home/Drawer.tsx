@@ -6,6 +6,7 @@ import CupertinoSearchBar from "../../components/atoms/cupertinoSearchBar/Cupert
 import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
 import {useCallback, useState} from "react";
 import {setUser} from "../../reducers/user/actions";
+import CabNavigator from "./CabNavigator";
 
 
 const Drawer = createDrawerNavigator();
@@ -31,10 +32,11 @@ const Drawer = createDrawerNavigator();
                 headerShown: true,
                 header: ({navigation}) => {
 
-                    return <CupertinoSearchBar onPress={()=> navigation.toggleDrawer()} />
+                    return <CupertinoSearchBar onRightPress={()=>navigation.navigate('Cab')} onPress={()=> navigation.toggleDrawer()} />
 
                 }
             }}  useLegacyImplementation={true}  initialRouteName="RNHome">
+                <Drawer.Screen name="Cab" component={CabNavigator} />
                 <Drawer.Screen name="RNHome" component={RNHome} />
                 <Drawer.Screen name="Settings" component={Settings} />
             </Drawer.Navigator>

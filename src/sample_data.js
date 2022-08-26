@@ -5,24 +5,38 @@ let data = {
         {
             id: '1',
             title: 'Steel',
-
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/items/Rebar-Metal-Supermarkets-removebg-preview%201.png?raw=true"
+            }
         },
         {
             id: '2',
             title: 'Masonry',
+            image:{
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/items/image%201.png?raw=true'}
         },
         {
             id: '3',
             title: 'Lumber',
-        },{
+            image: {
+                url: 'https://github.com/edward1986/SS/blob/master/assets/png/items/kikcnowjcodj-removebg-preview%201%20(1).png?raw=true'
+            }
+        },
+        {
             id: '4',
             title: 'Tilework',
+            image:{
+                url:'https://github.com/edward1986/SS/blob/master/assets/png/items/image%203.png?raw=true'}
         },{
             id: '5',
             title: 'Plumbing',
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/items/image%202.png?raw=true"}
         },{
             id: '6',
             title: 'Glass',
+            image:{
+                url: "https://github.com/edward1986/SS/blob/master/assets/png/items/image%204.png?raw=true"}
         },
     ],
     subData:[

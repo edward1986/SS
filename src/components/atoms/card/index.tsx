@@ -1,7 +1,8 @@
 import React, {Component, useMemo} from "react";
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import Text from './../../atoms/text'
 import {Bold} from "../../../styles/fonts";
+import FastImage from "react-native-fast-image";
 function CardWithTextOverImage({item, onPress }) {
     return (
         <TouchableOpacity onPress={()=>onPress(item)} style={{flex: 1}}>
@@ -20,8 +21,8 @@ function CardWithTextOverImage({item, onPress }) {
                 elevation: 3,
                 overflow: "hidden"}}>
                 <View style={[styles.container]}>
-                    <Image
-                        source={item?.image?.url ? {url: item?.image.url} :require("../../../../assets/logo.png")}
+                    <FastImage
+                        source={item?.image?.url ? {uri: item?.image.url} :require("../../../../assets/logo.png")}
                         style={{
                             width:'100%',
                             height: 100,

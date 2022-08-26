@@ -6,6 +6,7 @@ import Login from '../screens/login';
 import Home from '../navigations/Home';
 import App from '../screens/app';
 import Drawer from "./Home/Drawer";
+import Cab from "../screens/cab";
 
 
 type RootStackParamList = {
@@ -13,7 +14,8 @@ type RootStackParamList = {
   Registration: undefined;
   Home: undefined;
   App: undefined;
-  Drawer: undefined
+  Drawer: undefined;
+  Cab: undefined;
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -31,6 +33,7 @@ const RootNavigator = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
         <Stack.Screen name="Home" component={Drawer} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

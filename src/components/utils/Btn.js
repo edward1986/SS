@@ -1,5 +1,7 @@
 import React from 'react';
 import config from '../../config';
+import P from "./P";
+import {Touchable} from "./index";
 
 export default Btn = (props) => {
 

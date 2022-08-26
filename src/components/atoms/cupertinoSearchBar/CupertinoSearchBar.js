@@ -30,7 +30,7 @@ function CupertinoSearchBar(props) {
           style={styles.inputRightIcon}
         ></MaterialCommunityIconsIcon>
       </View>
-      <TouchableOpacity style={styles.rightIconButton}>
+      <TouchableOpacity onPress={props.onRightPress} style={styles.rightIconButton}>
        <Image style={{width: 44, height: 44}} source={require("./../../../../assets/trucks.png")}/>
       </TouchableOpacity>
     </View>
