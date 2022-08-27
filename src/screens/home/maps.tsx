@@ -1,85 +1,213 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import {Platform, Text, View, StyleSheet, SafeAreaView, Button, TouchableOpacity} from "react-native";
+import React, {useState, useEffect, useCallback, useRef, useMemo} from "react";
+import {
+    Platform,
+    Text,
+    View,
+    StyleSheet,
+    SafeAreaView,
+    Button,
+    TouchableOpacity,
+    ActivityIndicator, Image
+} from "react-native";
 import * as Location from "expo-location";
-import * as Permission from "expo-permissions";
-
+import * as TaskManager from "expo-task-manager"
 import { ExpoLeaflet } from "expo-leaflet";
+import markerPin from "../../../assets/svg/markerPin";
+const LOCATION_TASK_NAME = 'LOCATION_TASK_NAME';
+let foregroundSubscription = null;
+
+import Routing from 'react-native-leaflet-routing';
+import FastImage from "react-native-fast-image";
+// Define the background task for location tracking
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({data, error}) => {
+    if (error) {
+        console.error(error);
+        return;
+    }
+    if (data) {
+        // Extract location coordinates from data
+        const {locations} = data;
+        const location = locations[0];
+        if (location) {
+            console.log('Location in background', location.coords);
+        }
+    }
+});
 
 export default function Maps() {
     const [mapCenterPosition, setMapCenterPosition] = useState({
-        lat: 36.850769,
-        lng: -76.285873,
+        lat: 8.4785442,
+        lng: 124.6524561,
     });
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
-    const getLocation = useCallback(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== "granted") {
-                setErrorMsg("Permission to access location was denied");
-                return;
-            }
+    // Define position state: {latitude: number, longitude: number}
+    const [position, setPosition] = useState<{latitude: number, longitude: number}>();
 
+    // Request permissions right after starting the app
+    useEffect(() => {
+        const requestPermissions = async () => {
+            const foreground = await Location.requestForegroundPermissionsAsync();
+            if (foreground.granted)
+                await Location.requestBackgroundPermissionsAsync();
             let location = await Location.getCurrentPositionAsync({});
-            setLocation(location);
-            setMapCenterPosition({
-                lat: location?.coords?.latitude,
-                lng: location?.coords?.longitude,
-            });
-        })();
+            startForegroundUpdate()
+        };
+        requestPermissions();
     }, []);
 
-    let text = "Waiting..";
-    if (errorMsg) {
-        text = errorMsg;
-    } else if (location) {
-        text = JSON.stringify(location);
-    }
+    const startForegroundUpdate = async () => {
+        // Check if foreground permission is granted
+        const {granted} = await Location.getForegroundPermissionsAsync();
+        if (!granted) {
+            console.log('location tracking denied');
+            return;
+        }
+
+        // Make sure that foreground location tracking is not running
+        foregroundSubscription?.remove();
+
+        // Start watching position in real-time
+        foregroundSubscription = await Location.watchPositionAsync(
+            {
+                // For better logs, we set the accuracy to the most sensitive option
+                accuracy: Location.Accuracy.BestForNavigation,
+            },
+            location => {
+                setMapCenterPosition({
+                    lat: location?.coords?.latitude,
+                    lng: location?.coords?.longitude,
+                });
+                setPosition(location.coords);
+            },
+        );
+    };
+
+    // Stop location tracking in foreground
+    const stopForegroundUpdate = () => {
+        foregroundSubscription?.remove();
+        setPosition(null);
+    };
+
+    // Start location tracking in background
+    const startBackgroundUpdate = async () => {
+        // Don't track position if permission is not granted
+        const {granted} = await Location.getBackgroundPermissionsAsync();
+        if (!granted) {
+            console.log('location tracking denied');
+            return;
+        }
+
+        // Make sure the task is defined otherwise do not start tracking
+        const isTaskDefined = await TaskManager.isTaskDefined(LOCATION_TASK_NAME);
+        if (!isTaskDefined) {
+            console.log('Task is not defined');
+            return;
+        }
+
+        // Don't track if it is already running in background
+        const hasStarted = await Location.hasStartedLocationUpdatesAsync(
+            LOCATION_TASK_NAME,
+        );
+        if (hasStarted && position) {
+            console.log('Already started');
+            return;
+        }
+
+        await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+            // For better logs, we set the accuracy to the most sensitive option
+            accuracy: Location.Accuracy.BestForNavigation,
+            // Make sure to enable this notification if you want to consistently track in the background
+            showsBackgroundLocationIndicator: true,
+            foregroundService: {
+                notificationTitle: 'Location',
+                notificationBody: 'Location tracking in background',
+                notificationColor: '#fff',
+            },
+        });
+    };
+
+    // Stop location tracking in background
+    const stopBackgroundUpdate = async () => {
+        const hasStarted = await Location.hasStartedLocationUpdatesAsync(
+            LOCATION_TASK_NAME,
+        );
+        if (hasStarted) {
+            await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+            console.log('Location tacking stopped');
+        }
+    };
+
+    const pin = useMemo(()=>{
+        return  markerPin
+    }, [])
+
+
+    const positionMemo = useMemo(()=>{
+        return position
+    }, [position])
+
+    const mapCenterPositionMemo = useMemo(()=>{
+        return mapCenterPosition
+    }, [mapCenterPosition])
 
     return (
-                <View style={{ height: "100%" }}>
-                    <View style={{position: "absolute", width: "100%", bottom: 50,  zIndex: 1, justifyContent: "center", alignItems: "center"}}>
-                        <View style={{ justifyContent: "center", alignItems: "center"}}>
-                            <TouchableOpacity onPress={getLocation}>
-                                <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: "#7B896E", borderRadius: 10}}>
-                                    <Text style={{ fontWeight: "bold",  color: "#fff"}}>Get Location</Text>
-                                </View>
-
-                            </TouchableOpacity>
+        <View style={{ height: "100%" }}>
+            <View style={{position: "absolute", width: "100%", bottom: 50,  zIndex: 1, justifyContent: "center", alignItems: "center"}}>
+                <View style={{ justifyContent: "center", alignItems: "center"}}>
+                    <TouchableOpacity onPress={startForegroundUpdate}>
+                        <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: "#7B896E", borderRadius: 10}}>
+                            <Text style={{ fontWeight: "bold",  color: "#fff"}}>Get Location</Text>
                         </View>
 
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <ExpoLeaflet
-                            backgroundColor={"#E4E3DF"}
-                            onMessage={() => console.log("")}
-                            mapLayers={[
-                                {
-                                    attribution:
-                                        '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                                    baseLayerIsChecked: true,
-                                    baseLayerName: "OpenStreetMap.Mapnik",
-                                    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                },
-                            ]}
-                            mapMarkers={[
-                                {
-                                    id: "1",
-                                    position: {
-                                        lat: mapCenterPosition.lat,
-                                        lng: mapCenterPosition.lng,
-                                    },
-                                    icon: "https://www.pinclipart.com/picdir/middle/537-5374089_react-js-logo-clipart.png",
-                                    size: [32, 32],
-                                },
-                            ]}
-                            mapCenterPosition={mapCenterPosition}
-                            zoom={15}
-                        />
-                    </View>
+                    </TouchableOpacity>
                 </View>
+
+            </View>
+            <View style={{ flex: 1 }}>
+                <ExpoLeaflet
+
+                    loadingIndicator={()=><View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center", zIndex: 1, position: "absolute", }}>
+                        <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
+                            <ActivityIndicator/>
+                        </View>
+                    </View>}
+
+                    onMapLoad={()=> {
+                        console.log("onMapLoad")
+                    }  }
+                    backgroundColor={"#E4E3DF"}
+                    onMessage={() => console.log("")}
+                    mapLayers={[
+                        {
+                            attribution:
+                                '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                            baseLayerIsChecked: true,
+                            baseLayerName: "OpenStreetMap.Mapnik",
+                            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        },
+                    ]}
+
+                    mapMarkers={[
+                        {
+                            id: "1",
+                            position: {
+                                lat: positionMemo?.latitude || 0,
+                                lng: positionMemo?.longitude || 0,
+                            },
+                            icon: pin,
+                            size: [32, 32],
+
+                        },
+                    ]}
+
+                    mapCenterPosition={mapCenterPositionMemo}
+                    zoom={15}
+                />
+            </View>
+        </View>
     );
 }
 

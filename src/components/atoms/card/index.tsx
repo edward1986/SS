@@ -27,7 +27,7 @@ function CardWithTextOverImage({item, onPress }) {
                             width:'100%',
                             height: 100,
                         }}
-                        resizeMode="contain"
+                        resizeMode="stretch"
                     />
 
 
