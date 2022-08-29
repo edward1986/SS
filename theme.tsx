@@ -20,6 +20,7 @@ const basePalette = {
 const palette = {
     ...basePalette,
     // 主色
+    background: "#E4E3DF",
     primary50: '#E5F1FF',
     primary100: '#3AA3FF',
     primary200: '#AFB8A7',

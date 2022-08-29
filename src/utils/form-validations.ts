@@ -20,7 +20,9 @@ const validatePassword = (text:string) => {
     characterLength,
     upperAndLowerCase,
     atLeastOneNumber,
-    isValid: characterLength && upperAndLowerCase && atLeastOneNumber,
+    isValid: characterLength ,
+        //&& upperAndLowerCase
+        //&& atLeastOneNumber,
     strength: passwordStrength,
   };
 }

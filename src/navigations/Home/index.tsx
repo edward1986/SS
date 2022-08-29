@@ -56,7 +56,7 @@ function MyTabBar({state, descriptors, navigation}) {
                         target: route.key,
                     });
                 };
-                const focused = "#2863D6";
+                const focused = "#222222";
                     const unfocused = "#606A80";
                 return (
                     <View key={route.key} style={{flex: 1}}>

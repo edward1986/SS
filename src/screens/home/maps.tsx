@@ -15,9 +15,8 @@ import { ExpoLeaflet } from "expo-leaflet";
 import markerPin from "../../../assets/svg/markerPin";
 const LOCATION_TASK_NAME = 'LOCATION_TASK_NAME';
 let foregroundSubscription = null;
-
-import Routing from 'react-native-leaflet-routing';
-import FastImage from "react-native-fast-image";
+import firebase from "../../services/config";
+import {RootStateOrAny, useSelector} from "react-redux";
 // Define the background task for location tracking
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({data, error}) => {
     if (error) {
@@ -35,10 +34,12 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({data, error}) => {
 });
 
 export default function Maps() {
+    const user = useSelector((state:RootStateOrAny) => state.user);
     const [mapCenterPosition, setMapCenterPosition] = useState({
         lat: 8.4785442,
         lng: 124.6524561,
     });
+const [dataSource, setDataSource] = useState([])
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -48,6 +49,7 @@ export default function Maps() {
 
     // Request permissions right after starting the app
     useEffect(() => {
+
         const requestPermissions = async () => {
             const foreground = await Location.requestForegroundPermissionsAsync();
             if (foreground.granted)
@@ -56,8 +58,31 @@ export default function Maps() {
             startForegroundUpdate()
         };
         requestPermissions();
-    }, []);
+        let maps = firebase.database().ref("/maps");
+        listenForMaps(maps)
 
+
+
+    }, []);
+    const listenForMaps = (mapsRef) => {
+
+
+
+        mapsRef.on("value", dataSnapshot => {
+            var maps = [];
+            dataSnapshot.forEach(child => {
+                if(child.key != user?.user?.id) {
+                    maps.push({
+                        lat: child.val().lat,
+                        lng: child.val().lng,
+                        key: child.key
+                    });
+                }
+
+            });
+            setDataSource(maps)
+        });
+    }
     const startForegroundUpdate = async () => {
         // Check if foreground permission is granted
         const {granted} = await Location.getForegroundPermissionsAsync();
@@ -76,6 +101,18 @@ export default function Maps() {
                 accuracy: Location.Accuracy.BestForNavigation,
             },
             location => {
+                const updates = {};
+                if(user?.user?.id){
+                    updates[`maps/` + user?.user?.id] = {
+                        lat: location?.coords?.latitude,
+                        lng: location?.coords?.longitude,
+                    };
+                    firebase
+                        .database()
+                        .ref()
+                        .update(updates)
+                }
+
                 setMapCenterPosition({
                     lat: location?.coords?.latitude,
                     lng: location?.coords?.longitude,
@@ -154,60 +191,73 @@ export default function Maps() {
     }, [mapCenterPosition])
 
     return (
-        <View style={{ height: "100%" }}>
-            <View style={{position: "absolute", width: "100%", bottom: 50,  zIndex: 1, justifyContent: "center", alignItems: "center"}}>
-                <View style={{ justifyContent: "center", alignItems: "center"}}>
-                    <TouchableOpacity onPress={startForegroundUpdate}>
-                        <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: "#7B896E", borderRadius: 10}}>
-                            <Text style={{ fontWeight: "bold",  color: "#fff"}}>Get Location</Text>
+                <View style={{ height: "100%" }}>
+                    <View style={{position: "absolute", width: "100%", bottom: 50,  zIndex: 1, justifyContent: "center", alignItems: "center"}}>
+                        <View style={{ justifyContent: "center", alignItems: "center"}}>
+                            <TouchableOpacity onPress={startForegroundUpdate}>
+                                <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: "#7B896E", borderRadius: 10}}>
+                                    <Text style={{ fontWeight: "bold",  color: "#fff"}}>Get Location</Text>
+                                </View>
+
+                            </TouchableOpacity>
                         </View>
 
-                    </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <ExpoLeaflet
+
+                            loadingIndicator={()=><View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center", zIndex: 1, position: "absolute", }}>
+                                <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
+                                   <ActivityIndicator/>
+                                </View>
+                            </View>}
+
+                            onMapLoad={()=> {
+                                console.log("onMapLoad")
+                            }  }
+                            backgroundColor={"#E4E3DF"}
+                            onMessage={(message) => {
+                            }}
+                            mapLayers={[
+                                {
+
+                                    attribution:
+                                        '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                                    baseLayerIsChecked: true,
+                                    baseLayerName: "OpenStreetMap.Mapnik",
+                                    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                },
+                            ]}
+
+                            mapMarkers={[...dataSource.map(value => {
+                                return {
+                                    id: value.key,
+                                    position: {
+                                        lat: value?.lat || 0,
+                                        lng: value?.lng || 0,
+                                    },
+                                    icon: pin,
+                                    size: [32, 32],
+
+                                }
+                            }),
+                                {
+                                    id: "1",
+                                    position: {
+                                        lat: positionMemo?.latitude || 0,
+                                        lng: positionMemo?.longitude || 0,
+                                    },
+                                    icon: pin,
+                                    size: [32, 32],
+
+                                },
+                            ]}
+
+                            mapCenterPosition={mapCenterPositionMemo}
+                            zoom={15}
+                        />
+                    </View>
                 </View>
-
-            </View>
-            <View style={{ flex: 1 }}>
-                <ExpoLeaflet
-
-                    loadingIndicator={()=><View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center", zIndex: 1, position: "absolute", }}>
-                        <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
-                            <ActivityIndicator/>
-                        </View>
-                    </View>}
-
-                    onMapLoad={()=> {
-                        console.log("onMapLoad")
-                    }  }
-                    backgroundColor={"#E4E3DF"}
-                    onMessage={() => console.log("")}
-                    mapLayers={[
-                        {
-                            attribution:
-                                '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                            baseLayerIsChecked: true,
-                            baseLayerName: "OpenStreetMap.Mapnik",
-                            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        },
-                    ]}
-
-                    mapMarkers={[
-                        {
-                            id: "1",
-                            position: {
-                                lat: positionMemo?.latitude || 0,
-                                lng: positionMemo?.longitude || 0,
-                            },
-                            icon: pin,
-                            size: [32, 32],
-
-                        },
-                    ]}
-
-                    mapCenterPosition={mapCenterPositionMemo}
-                    zoom={15}
-                />
-            </View>
-        </View>
     );
 }
 

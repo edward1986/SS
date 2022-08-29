@@ -19,7 +19,7 @@ const App = ({ navigation }:any) => {
 
             const hideSplashscreen = async () => {
                 await SplashScreen.hideAsync();
-                if (user && user.email) {
+                if (user && user?.user?.email) {
                     navigation.replace('Home');
                 } else {
                     navigation.replace('Login');

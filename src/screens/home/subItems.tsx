@@ -11,25 +11,31 @@ import {Bold} from "../../styles/fonts";
 import {InputField} from "../../components/molecules/form-fields";
 import CloseCircleIcon from "../../../assets/svg/closecircle";
 import BlurryModal from "../../components/organisms/blurryModal";
+import {primaryColor} from "../../styles/color";
+import ListEmptyComponent from "../../components/atoms/listEmpty";
 
 
 const SubItems = (props) => {
-    const subData = useMemo(()=> data.subData.filter((value) => props.route.params.id == value.data_id), []);
+    const subData = useMemo(()=> {
+        return data.subData.filter((value) => props.route.params.id == value.data_id)
+    }, []);
     const { height, width } = useWindowDimensions();
-    function ListEmptyComponent() {
-           return <Box flex={1} ><Empty emptyText={"No Content"}/></Box>
 
-    }
     const [item, setItem] = useState({})
     const [modalVisible, setModalVisible] = useState(false);
     return (
         <>
+<View style={{flexDirection: "row",  alignItems: "center"}}>
+    <Touchable onPress={() => props.navigation.goBack()}>
+        <View style={{padding: 20}}>
+            <ArrowBackIcon />
+        </View>
 
-            <Touchable onPress={() => props.navigation.goBack()}>
-                <View style={{padding: 20}}>
-                    <ArrowBackIcon />
-                </View>
-            </Touchable>
+    </Touchable>
+    <View>
+        <Text size={21} style={{fontFamily: Bold}} color={primaryColor}>{props.route.params.name}</Text>
+    </View>
+</View>
                 <FlatList
                     ListEmptyComponent={ ListEmptyComponent}
                     showsVerticalScrollIndicator={false}
@@ -38,7 +44,7 @@ const SubItems = (props) => {
                     data={subData}
                     numColumns={2}
                     renderItem={(props) => CardWithTextOverImage({item:props.item, onPress: ()=>{
-                        console.log(props.item)
+
                         setItem(props.item)
                         setModalVisible(true)
                     }})}

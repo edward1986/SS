@@ -22,6 +22,10 @@ import Text from '../components/atoms/text';
 import Button from '../components/atoms/button';
 import { text, button, outline } from '../styles/color';
 import {Bold} from "../styles/fonts";
+import {BASE_URL} from "../services/config";
+import axios from "axios";
+import {StackActions} from "@react-navigation/native";
+import LogoText from "../../assets/svg/logoText";
 const logo = require('../../assets/logo.png');
 const background = require('../../assets/background.png');
 const styles = StyleSheet.create({
@@ -64,11 +68,27 @@ const Login = ({ navigation }:any) => {
   const [loading, setLoading] = useState(false);
   const onLogin = useCallback(async (data) => {
     setLoading(true);
-    await setTimeout(() => {
+    axios.post(BASE_URL + "/api/login", {
+      email: data.email,
+      password: data.password,
+    }).then((response) => {
+
       setLoading(false);
-      dispatch(setUser(data));
-      navigation.navigate('Home');
-    }, 3000);
+      dispatch(setUser(response.data));
+      navigation.dispatch(StackActions.replace('Home'));
+    }) .catch(e => {
+      setLoading(false);
+      if (e) {
+        setFormValue({
+          ...formValue,
+          email: {
+            ...formValue.email,
+            error: 'Authentication failed'
+          }
+        });
+      }
+    });
+
   }, []);
   const [formValue, setFormValue] = useState({
     email: {
@@ -178,7 +198,7 @@ const Login = ({ navigation }:any) => {
             <View style={styles.horizontal}>
               <Image style={styles.image} source={logo} />
               <View style={{paddingTop: "10%"}}>
-                <Text style={{fontFamily: Bold, fontSize: 14}}>Welcome to Spare Square!</Text>
+                <LogoText/>
               </View>
 
             </View>

@@ -1,4 +1,4 @@
-const primaryColor = '#274AD7';
+const primaryColor = "#7B896E";
 const secondaryColor = '#FFFFFF';
 const defaultColor = '#787A80';
 const successColor = '#2C9669';

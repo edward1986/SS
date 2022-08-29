@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from "react-native";
 import Text from './../../atoms/text'
 import {Bold} from "../../../styles/fonts";
 import FastImage from "react-native-fast-image";
+import {BASE_URL} from "../../../services/config";
 function CardWithTextOverImage({item, onPress }) {
     return (
         <TouchableOpacity onPress={()=>onPress(item)} style={{flex: 1}}>
@@ -22,7 +23,7 @@ function CardWithTextOverImage({item, onPress }) {
                 overflow: "hidden"}}>
                 <View style={[styles.container]}>
                     <FastImage
-                        source={item?.image?.url ? {uri: item?.image.url} :require("../../../../assets/logo.png")}
+                        source={item?.image ? {uri: BASE_URL + "/storage/" +item?.image} :require("../../../../assets/logo.png")}
                         style={{
                             width:'100%',
                             height: 100,
@@ -34,7 +35,7 @@ function CardWithTextOverImage({item, onPress }) {
                 </View>
                 <View>
                     <View style={styles.bodyContent}>
-                        <Text style={styles.titleStyle}>{item.title}</Text>
+                        <Text style={styles.titleStyle}>{item.name}</Text>
                     </View>
                 </View>
             </View>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165176118857",
+    "project_id": "sparesquare-7113e",
+    "storage_bucket": "sparesquare-7113e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165176118857:android:5f7bfc52861d5812d0f998",
+        "android_client_info": {
+          "package_name": "io.expo.sparesquare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165176118857-j99011osrd62l5je3sasvktqd2u100tj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe32ZuqRzzoGXrwfjRWbG0fsYEG6D9V0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165176118857-j99011osrd62l5je3sasvktqd2u100tj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
