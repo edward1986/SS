@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Dimensions,
     FlatList,
     Modal, View
 } from 'react-native';
@@ -26,7 +27,7 @@ import sample_data from '../../sample_data';
 import Text from "../../components/atoms/text"
 import { AddressItem } from '../../components/reuse/AddressItem';
 import ArrowBackIcon from "../../../assets/svg/arrow-back";
-
+const {height} = Dimensions.get('window');
 export default class Address extends React.Component {
 
     state = {
@@ -121,6 +122,15 @@ export default class Address extends React.Component {
                         }}
                     />
                     <FloatingLabelInput
+
+                        inputStyle={{
+
+                            textAlignVertical: "top",
+                            [ "height"]: 100,
+                            fontWeight:"400",
+                            fontSize:(14)
+                        }}
+                        multiline={true}
                         label="Shipping Address"
                         onChangeText={(text) => this.setState({shippingAddress: text})}
                         returnKeyType={"next"}
@@ -133,6 +143,14 @@ export default class Address extends React.Component {
                         }}
                     />
                     <FloatingLabelInput
+                        inputStyle={{
+
+                            textAlignVertical: "top",
+                            [ "height"]: 100,
+                            fontWeight:"400",
+                            fontSize:(14)
+                        }}
+                        multiline={true}
                         label="Specific Description of Location"
                         onChangeText={(text) => this.setState({SpecificDescriptionofLocation: text})}
                         returnKeyType={"done"}

@@ -9,6 +9,7 @@ import {setCategories} from "../../reducers/category/actions";
 import Toast from 'react-native-toast-message'
 import LogoText from "../../../assets/svg/logoText";
 import ListEmptyComponent from "../../components/atoms/listEmpty";
+import listHeaderComponent from "../../components/listHeader";
 
 const styles = StyleSheet.create({
     container: {
@@ -54,23 +55,7 @@ const Home = ({navigation}: any) => {
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
-    function listHeaderComponent() {
-        return <View style={{
-            justifyContent: "center",
-            alignItems: "center", paddingBottom: 10
-        }}>
-            <Image
-                source={require("../../../assets/logo.png")}
-                style={{
 
-                    width: 120,
-                    height: 100,
-                }}
-                resizeMode="contain"
-            />
-            <LogoText/>
-        </View>
-    }
 
     const cardOnPress = (item) => {
         return navigation.navigate('SubItems', item)

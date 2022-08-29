@@ -121,7 +121,7 @@ export default class Home extends React.Component {
 									placeholderTextColor={'#999999'}
 									style={config.style.formInput2}
 									onChangeText={(text) => this.setState({q: text})}
-									placeholder={'Search products'}
+									placeholder={'Search product'}
 									value={this.state.q}
 									onSubmitEditing={() => {
 										this.doSearch();

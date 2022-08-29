@@ -53,7 +53,7 @@ const Drawer = createDrawerNavigator();
                                     }}>
 
                                         <ProfileIcon notification={false} width={(55)} height={(55)} />
-                                        <Text style={{padding: 5}} size={16}>PROFILE</Text>
+                                        <Text style={{padding: 5,  color: "#6E7191"}} size={16}>PROFILE</Text>
                                     </View>
 
                                 </View>
@@ -125,7 +125,7 @@ const Drawer = createDrawerNavigator();
                                                                 ? drawerLabel
                                                                 : title!==undefined
                                                                     ? title
-                                                                    : route.name == "RNHome" ? "Home" : route.name}</Text>
+                                                                    : route.name == "RNHome" ? "HOME" : route.name.toUpperCase()}</Text>
                                                         </View>
 
                                                     </View>

@@ -1,55 +1,89 @@
 import * as React from 'react';
-import {FlatList, Modal, StyleSheet, Pressable, useWindowDimensions, View} from "react-native";
-import data from "../../sample_data";
+import {useEffect, useMemo, useState} from 'react';
+import {FlatList, StyleSheet, useWindowDimensions, View} from "react-native";
 import CardWithTextOverImage from "../../components/atoms/card";
-import {useMemo, useState} from "react";
-import {Container, IconBtn, Left, Right, Row, Space, Touchable} from "../../components/utils";
+import {Touchable} from "../../components/utils";
 import ArrowBackIcon from "../../../assets/svg/arrow-back";
-import {Box, Button, Empty} from "@td-design/react-native";
-import Text from "./../../components/atoms/text"
+import {Button} from "@td-design/react-native";
 import {Bold} from "../../styles/fonts";
 import {InputField} from "../../components/molecules/form-fields";
 import CloseCircleIcon from "../../../assets/svg/closecircle";
 import BlurryModal from "../../components/organisms/blurryModal";
 import {primaryColor} from "../../styles/color";
 import ListEmptyComponent from "../../components/atoms/listEmpty";
-
+import axios from "axios";
+import Toast from "react-native-toast-message";
+import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
+import {BASE_URL} from "../../services/config";
+import {setProducts} from "../../reducers/product/actions";
+import Text from '../../components/atoms/text'
 
 const SubItems = (props) => {
-    const subData = useMemo(()=> {
-        return data.subData.filter((value) => props.route.params.id == value.data_id)
-    }, []);
-    const { height, width } = useWindowDimensions();
+    const token = useSelector((state: RootStateOrAny) => state.user?.user?.token?.token);
+    const products = useSelector((state: RootStateOrAny) => state.product?.products);
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const {height, width} = useWindowDimensions();
 
     const [item, setItem] = useState({})
     const [modalVisible, setModalVisible] = useState(false);
-    return (
-        <>
-<View style={{flexDirection: "row",  alignItems: "center"}}>
-    <Touchable onPress={() => props.navigation.goBack()}>
-        <View style={{padding: 20}}>
-            <ArrowBackIcon />
-        </View>
+    const productsMemo = useMemo(() => {
+        return products
+    }, [products])
 
-    </Touchable>
-    <View>
-        <Text size={21} style={{fontFamily: Bold}} color={primaryColor}>{props.route.params.name}</Text>
-    </View>
-</View>
-                <FlatList
-                    ListEmptyComponent={ ListEmptyComponent}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{flexGrow: 1 ,paddingHorizontal:  10, paddingBottom: 20}}
-                    columnWrapperStyle={{ justifyContent: 'space-between' }}
-                    data={subData}
-                    numColumns={2}
-                    renderItem={(props) => CardWithTextOverImage({item:props.item, onPress: ()=>{
+    useEffect(() => {
+        return fetchProducts()
+    }, [])
+
+    const fetchProducts = () => {
+        setLoading(true);
+        axios.get(BASE_URL + "/api/products?page=" + page, {
+            headers: {
+                Authorization: "Bearer ".concat(token)
+            }
+        }).then((response) => {
+
+            dispatch(setProducts(response.data.data))
+            setLoading(false);
+            if (response.data.last_page != page) {
+                setPage(page + 1);
+            }
+        }).catch((response) => {
+            Toast.show({
+                type: 'error', text1: response.message,
+            })
+            console.log(response.message)
+        })
+    }
+    return (<View style={{flex: 1, backgroundColor: "#E4E3DF"}}>
+            <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Touchable onPress={() => props.navigation.goBack()}>
+                    <View style={{padding: 20}}>
+                        <ArrowBackIcon/>
+                    </View>
+
+                </Touchable>
+                <View>
+                    <Text size={21} style={{fontFamily: Bold}} color={primaryColor}>{props.route.params.name}</Text>
+                </View>
+            </View>
+            <FlatList
+                ListEmptyComponent={ListEmptyComponent}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{flexGrow: 1, paddingHorizontal: 10, paddingBottom: 20}}
+                columnWrapperStyle={{justifyContent: 'space-between'}}
+                data={productsMemo}
+                numColumns={2}
+                renderItem={(props) => CardWithTextOverImage({
+                    item: props.item, onPress: () => {
 
                         setItem(props.item)
                         setModalVisible(true)
-                    }})}
-                    keyExtractor={item => item.id}
-                />
+                    }
+                })}
+                keyExtractor={item => item.id}
+            />
 
 
             <BlurryModal visible={modalVisible} onClose={() => {
@@ -58,7 +92,7 @@ const SubItems = (props) => {
                 <View style={styles.centeredView}>
 
                     <View style={styles.modalView}>
-                        <Touchable onPress={()=>{
+                        <Touchable onPress={() => {
                             setModalVisible(false);
                         }}>
                             <View style={{alignItems: "flex-end", justifyContent: "flex-end"}}>
@@ -66,72 +100,72 @@ const SubItems = (props) => {
                             </View>
                         </Touchable>
 
+                        <View style={{padding: 30}}>
+                            <Text size={25} style={{fontFamily: Bold}}>{item?.name}</Text>
+                            <View style={{paddingVertical: 24, justifyContent: "center", alignItems: "center"}}>
+                                <Text size={16} style={{fontFamily: Bold}}>40 per kilo</Text>
+                            </View>
+                            <Text size={15}>Diameter</Text>
+                            <View style={{flexDirection: 'row', alignItems: "center",}}>
+                                <View style={{flex: 1, paddingRight: 10}}>
+                                    <InputField outlineStyle={{borderColor: 'transparent',}}
+                                                inputStyle={{borderRadius: 21, backgroundColor: "#E4E3DF"}}/>
+                                </View>
 
-                        <Text  size={25} style={{fontFamily: Bold}}>{item?.title}</Text>
-                        <View style={{justifyContent: "center", alignItems: "center"}}>
-                            <Text size={16} style={{fontFamily: Bold}}>40 per kilo</Text>
+                                <Text size={14}>mm</Text>
+                            </View>
+
+                            <Text size={15}>Length</Text>
+                            <View style={{flexDirection: 'row', alignItems: "center",}}>
+                                <View style={{flex: 1, paddingRight: 10}}>
+                                    <InputField outlineStyle={{borderColor: 'transparent',}}
+                                                inputStyle={{borderRadius: 21, backgroundColor: "#E4E3DF"}}/>
+                                </View>
+                                <Text style={14}>m</Text>
+                            </View>
+                            <Text size={15}>Quantity</Text>
+                            <View style={{flexDirection: 'row', alignItems: "center",}}>
+                                <View style={{flex: 1, paddingRight: 10}}>
+                                    <InputField outlineStyle={{borderColor: 'transparent',}}
+                                                inputStyle={{borderRadius: 21, backgroundColor: "#E4E3DF"}}/>
+                                </View>
+                                <Text size={14}>pcs.</Text>
+                            </View>
+                            <View style={{paddingTop: 30}}>
+                                <Button borderRadius={6} title={"Add to Cab"}></Button>
+                            </View>
                         </View>
-                        <Text>Diameter</Text>
-                        <InputField outlineStyle={{borderColor: 'transparent',}} inputStyle={{ borderRadius: 21, backgroundColor: "#E4E3DF"}}  />
-                        <Text>Length</Text>
-                        <InputField outlineStyle={{borderColor: 'transparent',}} inputStyle={{ borderRadius: 21, backgroundColor: "#E4E3DF"}}  />
-                        <Text>Quantity</Text>
-                        <InputField outlineStyle={{borderColor: 'transparent',}} inputStyle={{ borderRadius: 21, backgroundColor: "#E4E3DF"}}  />
-                        <View style={{paddingTop: 10}}>
-                            <Button  borderRadius={6} title={"Add to Cab"} ></Button>
-                        </View>
+
                     </View>
                 </View>
             </BlurryModal>
 
-        </>
-
-
+        </View>
 
 
     );
 };
 const styles = StyleSheet.create({
     centeredView: {
-        flex: 1,
-        justifyContent: "center",
+        flex: 1, justifyContent: "center",
 
 
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
+    }, modalView: {
+        margin: 20, backgroundColor: "white", borderRadius: 20, padding: 10,
 
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-    },
-    buttonOpen: {
+        shadowColor: "#000", shadowOffset: {
+            width: 0, height: 2
+        }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5
+    }, button: {
+        borderRadius: 20, padding: 10, elevation: 2
+    }, buttonOpen: {
         backgroundColor: "#F194FF",
-    },
-    buttonClose: {
+    }, buttonClose: {
         backgroundColor: "#2196F3",
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
+    }, textStyle: {
+        color: "white", fontWeight: "bold", textAlign: "center"
+    }, modalText: {
+        marginBottom: 15, textAlign: "center"
     }
 });
 export default SubItems;

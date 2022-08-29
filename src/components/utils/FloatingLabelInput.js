@@ -29,18 +29,18 @@ export default class FloatingLabelInput extends React.Component {
                 </Text>
                 <TextInput
 
-                    {...props}
 
-                    style={{
+                    style={[{
                         borderRadius: 5,
                     height: 35,
-                    padding: 0,
+                    padding: 10,
                     fontSize: 18,
                     color: config.defaultFontColor,
                         backgroundColor: "#B8B89C",
                     fontWeight: 'bold',
                     fontFamily: config.defaultFont
-                }}
+                }, props.inputStyle]}
+                    {...props}
                     textBreakStrategy={'simple'}
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}/>
