@@ -67,7 +67,7 @@ const Home = ({navigation}: any) => {
 
     useEffect(() => {
         return fetchCategories()
-    }, [])
+    }, [categories.length == 0])
 
     const fetchCategories = () => {
         setLoading(true);

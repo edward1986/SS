@@ -60,6 +60,7 @@ const SubItems = (props) => {
     const [dimension2Input, setDimension2Input] = useState('')
     const [quantity, setQuantity] = useState('')
     const AddToCart = (item) =>  {
+        console.log(item)
             dispatch(setAddToCart(item))
     }
 

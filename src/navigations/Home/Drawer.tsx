@@ -63,6 +63,25 @@ const Drawer = createDrawerNavigator();
                         )} onPress={()=>{
                             props.navigation.navigate('Profile')
                         }} />
+
+                        <DrawerItem label="Home" icon={()=>(
+                            <View style={{width:"100%"}}>
+                                <View>
+                                    <View style={{
+                                        alignItems:"center",
+                                        justifyContent:"center",
+                                    }}>
+                                        <HomeIcon  height={55} width={55}/>
+                                        <Text style={{padding: 5,  color: "#6E7191"}} size={16}>HOME</Text>
+                                    </View>
+
+                                </View>
+
+                            </View>
+
+                        )} onPress={()=>{
+                            props.navigation.navigate('Items')
+                        }} />
                         {state.routes.map((route,i)=>{
                             const focused=i===state.index;
                             const focusedDescriptor=props.descriptors[focusedRoute.key];
@@ -97,16 +116,13 @@ const Drawer = createDrawerNavigator();
                             let tabIcon:any=null;
 
                             switch(route.name){
-                                case 'RNHome':
-                                    tabIcon=<HomeIcon focused={focused} color={focused ? "#113196" : "#6E7191"} height={55} width={55}/>;
-                                    break;
                                 case 'Settings':
                                     tabIcon=<SettingIcon focused={focused} color={focused ? "#113196" : "#6E7191"} height={55} width={55}/>;
                                     break;
                                 default:
                                     tabIcon=null;
                             }
-                            return route.name!='Cab'&&<View>
+                            return (route.name!='Cab' && route.name!='RNHome') &&<View>
                                 <DrawerItem key={route.key} label={""} activeBackgroundColor={"transparent"} focused={focused}
                                             icon={()=>(
                                                 <View style={{width:"100%"}}>
