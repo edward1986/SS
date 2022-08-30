@@ -49,6 +49,7 @@ export const lightTheme: Theme = {
         ...theme.lightTheme.colors,
         ...palette
     },
+
 };
 
 export const darkTheme: Theme = {

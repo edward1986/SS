@@ -15,7 +15,7 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
 import {BASE_URL} from "../../services/config";
-import {setProducts} from "../../reducers/product/actions";
+import {setAddToCart, setProducts} from "../../reducers/product/actions";
 import Text from '../../components/atoms/text'
 
 const SubItems = (props) => {
@@ -56,6 +56,13 @@ const SubItems = (props) => {
             console.log(response.message)
         })
     }
+    const [dimension1Input, setDimension1Input] = useState('')
+    const [dimension2Input, setDimension2Input] = useState('')
+    const [quantity, setQuantity] = useState('')
+    const AddToCart = (item) =>  {
+            dispatch(setAddToCart(item))
+    }
+
     return (<View style={{flex: 1, backgroundColor: "#E4E3DF"}}>
             <View style={{flexDirection: "row", alignItems: "center"}}>
                 <Touchable onPress={() => props.navigation.goBack()}>
@@ -77,7 +84,7 @@ const SubItems = (props) => {
                 numColumns={2}
                 renderItem={(props) => CardWithTextOverImage({
                     item: props.item, onPress: () => {
-
+                        console.log(props.item)
                         setItem(props.item)
                         setModalVisible(true)
                     }
@@ -103,36 +110,46 @@ const SubItems = (props) => {
                         <View style={{padding: 30}}>
                             <Text size={25} style={{fontFamily: Bold}}>{item?.name}</Text>
                             <View style={{paddingVertical: 24, justifyContent: "center", alignItems: "center"}}>
-                                <Text size={16} style={{fontFamily: Bold}}>40 per kilo</Text>
+                                <Text size={16} style={{fontFamily: Bold}}>{item.price} per kilo</Text>
                             </View>
-                            <Text size={15}>Diameter</Text>
+                            <View style={{paddingBottom: 10}}>
+                                <Text size={15}>{item?.dimension1}</Text>
+                            </View>
                             <View style={{flexDirection: 'row', alignItems: "center",}}>
-                                <View style={{flex: 1, paddingRight: 10}}>
-                                    <InputField outlineStyle={{borderColor: 'transparent',}}
+                                <View style={styles.inputContainer}>
+                                    <InputField onChangeText={setDimension1Input}
+                                                value={dimension1Input} outlineStyle={{borderColor: 'transparent',}}
                                                 inputStyle={{borderRadius: 21, backgroundColor: "#E4E3DF"}}/>
                                 </View>
 
-                                <Text size={14}>mm</Text>
+                                <Text size={14}>{item?.symbol1}</Text>
                             </View>
 
-                            <Text size={15}>Length</Text>
+                            <View style={{paddingBottom: 10}}>
+                                <Text size={15}>{item?.dimension2}</Text>
+                            </View>
                             <View style={{flexDirection: 'row', alignItems: "center",}}>
-                                <View style={{flex: 1, paddingRight: 10}}>
-                                    <InputField outlineStyle={{borderColor: 'transparent',}}
+                                <View style={styles.inputContainer}>
+                                    <InputField onChangeText={setDimension2Input}
+                                                value={dimension2Input} outlineStyle={{borderColor: 'transparent',}}
                                                 inputStyle={{borderRadius: 21, backgroundColor: "#E4E3DF"}}/>
                                 </View>
-                                <Text style={14}>m</Text>
+                                <Text style={14}>{item?.symbol1}</Text>
                             </View>
+                            <View style={{paddingBottom: 10}}>
                             <Text size={15}>Quantity</Text>
+                            </View>
                             <View style={{flexDirection: 'row', alignItems: "center",}}>
-                                <View style={{flex: 1, paddingRight: 10}}>
-                                    <InputField outlineStyle={{borderColor: 'transparent',}}
+                                <View style={styles.inputContainer}>
+                                    <InputField onChangeText={setQuantity}
+                                                value={quantity} outlineStyle={{borderColor: 'transparent',}}
                                                 inputStyle={{borderRadius: 21, backgroundColor: "#E4E3DF"}}/>
                                 </View>
                                 <Text size={14}>pcs.</Text>
                             </View>
-                            <View style={{paddingTop: 30}}>
-                                <Button borderRadius={6} title={"Add to Cab"}></Button>
+
+                            <View style={{paddingTop: 30}} >
+                                <Button onPress={() => AddToCart({quantity, dimension1Input, dimension2Input, ...item})} borderRadius={6} title={"Add to Cab"}></Button>
                             </View>
                         </View>
 
@@ -166,6 +183,7 @@ const styles = StyleSheet.create({
         color: "white", fontWeight: "bold", textAlign: "center"
     }, modalText: {
         marginBottom: 15, textAlign: "center"
-    }
+    },
+    inputContainer: {flex: 1, paddingRight: 10, paddingBottom: 10}
 });
 export default SubItems;

@@ -3,9 +3,12 @@ import {StyleSheet, View, TouchableOpacity, TextInput, Image} from "react-native
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MenuLeft from "../../../../assets/svg/menu";
 import {useSafeArea} from "react-native-safe-area-context";
+import Badge from "../badge";
+import {RootStateOrAny, useSelector} from "react-redux";
 
 function CupertinoSearchBar(props) {
   const {  top: paddingTop } = useSafeArea();
+  const addToCartLength = useSelector((state: RootStateOrAny) => state.product?.addToCartLength);
   return (
     <View style={[styles.container, {paddingTop},   props.style]}>
       <TouchableOpacity onPress={props.onPress} style={styles.leftIconButton}>
@@ -30,8 +33,12 @@ function CupertinoSearchBar(props) {
           style={styles.inputRightIcon}
         ></MaterialCommunityIconsIcon>
       </View>
+
       <TouchableOpacity onPress={props.onRightPress} style={styles.rightIconButton}>
-       <Image style={{width: 44, height: 44}} source={require("./../../../../assets/trucks.png")}/>
+
+        <Badge text={addToCartLength }>
+          <Image style={{width: 44, height: 44}} source={require("./../../../../assets/trucks.png")}/>
+        </Badge>
       </TouchableOpacity>
     </View>
   );

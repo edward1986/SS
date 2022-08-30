@@ -1,7 +1,9 @@
 const { Record } = require('immutable');
 
 const InitialState = Record({
-  products: []
+  products: [],
+  addToCart: [],
+  addToCartLength: 0
 });
 
 export default InitialState;
