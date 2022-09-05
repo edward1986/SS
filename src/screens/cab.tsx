@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, ScrollView, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, ScrollView, TouchableOpacity, View} from "react-native";
 import Text from "../components/atoms/text"
 import {Bold} from "../styles/fonts";
 import TrashIcon from "../../assets/svg/trashicon";
@@ -12,8 +12,8 @@ import {
     setCartItemDelete, setCartItemDelivery,
     setCartItemIncrement, setCartItemPickup
 } from "../reducers/product/actions";
-import {DELIVERY} from "../reducers/product/initialstate";
-import {setDrawerVisible} from "../reducers/drawer/actions";
+import Svg, {G, Path} from "react-native-svg";
+import {button, primaryColor} from "../styles/color";
 
 function Item(props: { onPress: () => void, cart, onCheck }) {
     const [check, setCheck] = useState(true)
@@ -99,6 +99,11 @@ const Cab = ({navigation}) => {
 
         dispatch(setCartItemDelivery( ))
     };
+
+    const _renderItem = ({item, index}) => {
+        return  <Item key={index} cart={item} onPress={() => {}}/>
+    }
+
     return (
         <ScrollView>
             <View style={{paddingHorizontal: 27,}}>
@@ -111,13 +116,26 @@ const Cab = ({navigation}) => {
                     <View style={{paddingVertical: 24,}}>
                         <Text style={{fontFamily: Bold}}>Products</Text>
                     </View>
-                    {
-                        addToCart.map((cart, index) => {
 
-                            return  <Item key={index} cart={cart} onPress={() => {}}/>
-                        })
 
-                    }
+                    <FlatList
+                        ListEmptyComponent={()=> <View style={{justifyContent: "center", alignItems: "center", paddingVertical:  10}}>
+                            <Svg width={128} height={82} viewBox="0 0 64 41">
+                                <G transform="translate(0 1)" fill="none" fillRule="evenodd">
+                                    <G stroke={primaryColor}>
+                                        <Path d="M55 12.76 44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z" />
+                                        <Path
+                                            d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
+                                            fill="none"
+                                        />
+                                    </G>
+                                </G>
+                            </Svg>
+                        </View>}
+                        data={addToCart}
+                        renderItem={_renderItem}
+                    />
+
 
                     <View style={{alignItems: "flex-end", }}>
                         <View style={{flexDirection: "row", justifyContent: "center"}}>
@@ -139,9 +157,9 @@ const Cab = ({navigation}) => {
                     </View>
                 </View>
                 <View style={{paddingBottom: 10}}>
-                    <TouchableOpacity onPress={()=> navigation.navigate('Address' )}>
+                    <TouchableOpacity disabled={addToCart.length == 0} onPress={()=> navigation.navigate('Address' )}>
                         <View style= {{  justifyContent: "center", alignItems: "flex-end",}}>
-                            <View style={{borderRadius: 6,backgroundColor: "#B8B89C" }}>
+                            <View style={{borderRadius: 6,backgroundColor: addToCart.length == 0 ? button.default :"#B8B89C" }}>
                                 <Text style={{ paddingHorizontal: 15, paddingVertical: 10}}>Continue</Text>
                             </View>
 

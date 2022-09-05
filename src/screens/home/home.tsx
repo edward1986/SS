@@ -54,7 +54,7 @@ const Home = ({navigation}: any) => {
     const categories = useSelector((state: RootStateOrAny) => state.category.categories);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
-
+    const dispatch = useDispatch();
     const cardOnPress = (item) => {
         return navigation.navigate('SubItems', item)
     };

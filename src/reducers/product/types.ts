@@ -9,5 +9,6 @@ export default keyMirror({
   SET_CART_ITEM_CHECK: null,
   SET_CART_ITEM_DELIVERY: null,
   SET_CART_ITEM_PICKUP: null,
-  SET_ADDRESS_ID: null
+  SET_ADDRESS_ID: null,
+  SET_EMPTY_CART: null
 });

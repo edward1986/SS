@@ -34,6 +34,7 @@ import {BASE_URL} from "../../services/config";
 import Toast from "react-native-toast-message";
 import useLocation from "../../hooks/useLocation";
 import {setDrawerVisible} from "../../reducers/drawer/actions";
+import {setAddToCart, setEmptyCart} from "../../reducers/product/actions";
 
 
 const OrderDetail = (props) => {
@@ -58,7 +59,7 @@ const OrderDetail = (props) => {
 const _renderItem = ({item}) => {
     return <Row nomargin={true}>
         <Column flex={0.6}>
-            <P style={{fontWeight: 'bold'}}>{item.name}</P>
+            <Text style={{fontFamily: Bold, fontSize: 16}} color={config.defaultFontColor}>{item.name}</Text>
             <Row style={styles.basicInfo} nomargin={true}>
                 <Column nopadding>
                     <View style={{flexDirection: "row"}}>
@@ -85,7 +86,7 @@ const _renderItem = ({item}) => {
                 <Column nopadding>
                     <View style={{flexDirection: "row"}}>
                         <Text color={config.defaultFontColor} style={{fontFamily: Bold}} >Quantity: </Text>
-                        <Text>{item.quantity} </Text>
+                        <Text color={config.defaultFontColor}>{item.quantity || 0} qty</Text>
                     </View>
 
                 </Column >
@@ -100,18 +101,14 @@ const _renderItem = ({item}) => {
 };
 
     function orderConfirm() {
-        console.log({
-            addToCart,
-            address,
-            location
-        }, "success")
+
         axios.post(BASE_URL + "/api/orders", {  addToCart,
             address, deliveryMode, location}, {
             headers: {
                 Authorization: "Bearer ".concat(token)
             }
         } ).then((response) => {
-            console.log(response.data, "success")
+           dispatch(setEmptyCart())
         }).catch((response) => {
             console.log(response.response, "error")
             Toast.show({

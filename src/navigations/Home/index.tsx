@@ -12,6 +12,7 @@ import ProfileIcon from "../../../assets/svg/profileIcon";
 import CupertinoSearchBar from "../../components/atoms/cupertinoSearchBar/CupertinoSearchBar";
 import Drawer from "./Drawer";
 import Stack from "./Stack";
+import BlogNavigator from "./BlogStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -125,7 +126,7 @@ const HomeNavigator = () => {
 
 
             <Tab.Screen name="Home" component={Stack}/>
-            <Tab.Screen name="Notification" component={Notifications}/>
+            <Tab.Screen name="Notification" component={BlogNavigator}/>
             <Tab.Screen name="Maps" component={Maps}/>
             <Tab.Screen name="Profile" component={Profile}/>
         </Tab.Navigator>

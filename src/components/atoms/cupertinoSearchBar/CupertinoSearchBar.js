@@ -23,7 +23,7 @@ function CupertinoSearchBar(props) {
       [getActiveRoute?.state?.routes?.[getActiveRoute?.state?.index]?.name])
 
   return (
-    <View style={[styles.container, {paddingTop,  backgroundColor:  getActiveRouteMemo === "Notification" ? "rgba(0,0,0,0)" : "#AFB8A7",},   props.style]}>
+    <View style={[styles.container, {paddingTop,  backgroundColor:  getActiveRouteMemo === "Notification" ? "#E4E3DF" : "#AFB8A7",},   props.style]}>
       <TouchableOpacity onPress={props.onPress} style={styles.leftIconButton}>
         <MenuLeft
           name="subdirectory-arrow-right"

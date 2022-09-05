@@ -7,7 +7,8 @@ const {
     SET_CART_ITEM_CHECK,
     SET_CART_ITEM_DELIVERY,
   SET_CART_ITEM_PICKUP,
-    SET_ADDRESS_ID
+    SET_ADDRESS_ID,
+    SET_EMPTY_CART
 } = require('./types').default;
 
 export function setProducts(payload) {
@@ -51,7 +52,11 @@ export function setCartItemDelivery() {
         type: SET_CART_ITEM_DELIVERY,
     };
 }
-
+export function setEmptyCart() {
+    return {
+        type: SET_EMPTY_CART,
+    };
+}
 export function setCartItemPickup() {
     return {
         type: SET_CART_ITEM_PICKUP,

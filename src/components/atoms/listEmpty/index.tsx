@@ -3,7 +3,7 @@ import * as React from "react";
 import Svg, {Ellipse, G, Path} from "react-native-svg";
 import {primaryColor} from "../../../styles/color";
 import Text from "../text"
-const ListEmptyComponent = () => {
+const ListEmptyComponent = (color) => {
 
     return <Box  flex={1} ><Empty customImg={<Svg width={128} height={82} viewBox="0 0 64 41">
         <G transform="translate(0 1)" fill="none" fillRule="evenodd">
