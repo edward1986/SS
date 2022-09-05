@@ -5,6 +5,8 @@ import user from './user/reducers';
 import theme from './theme/reducers';
 import category from './category/reducers';
 import product from './product/reducers';
+import address from './address/reducers';
+import drawer from './drawer/reducers';
 
 const persistConfig = {
   key: 'root',
@@ -15,5 +17,7 @@ export default combineReducers({
   user: persistReducer(persistConfig, user),
   theme,
   category,
-  product
+  product,
+  address,
+  drawer
 });

@@ -97,14 +97,7 @@ const InputField: FC<Props> = ({
         hasValidation && (
           <View style={styles.description}>
             <View style={styles.info}>
-              {
-                !!error && (
-                  <ExclamationIcon
-                    size={12}
-                    color={errorColor}
-                  />
-                )
-              }
+
               <Text
                 style={[
                   labelStyle,

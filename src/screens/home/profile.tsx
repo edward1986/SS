@@ -3,6 +3,9 @@ import {View, StyleSheet, FlatList} from "react-native";
 import ProfileIcon from "../../../assets/svg/profileIcon";
 import Text from './../../components/atoms/text'
 import {Bold, Regular} from "../../styles/fonts";
+import {useEffect} from "react";
+import {setDrawerVisible} from "../../reducers/drawer/actions";
+import {useDispatch} from "react-redux";
 const styles = StyleSheet.create({
     gridContainer: {
 
@@ -24,6 +27,8 @@ const styles = StyleSheet.create({
 
 })
 const Profile = () => {
+    const dispatch =  useDispatch()
+
     function Cell({ data, index }) {
         return (
             <View  style={styles.cellStyle}>

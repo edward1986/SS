@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message'
 import LogoText from "../../../assets/svg/logoText";
 import ListEmptyComponent from "../../components/atoms/listEmpty";
 import listHeaderComponent from "../../components/listHeader";
+import {setDrawerVisible} from "../../reducers/drawer/actions";
 
 const styles = StyleSheet.create({
     container: {
@@ -49,13 +50,10 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({navigation}: any) => {
-    const token = useSelector((state: RootStateOrAny) => state.user?.user?.token?.token);
+    const token = useSelector((state: RootStateOrAny) => state.user?.token?.token);
     const categories = useSelector((state: RootStateOrAny) => state.category.categories);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
-    const dispatch = useDispatch();
-
-
 
     const cardOnPress = (item) => {
         return navigation.navigate('SubItems', item)
@@ -68,7 +66,6 @@ const Home = ({navigation}: any) => {
     useEffect(() => {
         return fetchCategories()
     }, [categories.length == 0])
-
     const fetchCategories = () => {
         setLoading(true);
         axios.get(BASE_URL + "/api/categories?page=" + page, {
@@ -86,7 +83,6 @@ const Home = ({navigation}: any) => {
                 type: 'error',
                 text1: response.message,
             })
-            console.log(response.message)
         })
     }
     return (

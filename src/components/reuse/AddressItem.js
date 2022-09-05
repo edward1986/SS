@@ -13,10 +13,10 @@ export const AddressItem = (props) => {
         <ListItem onPress={() => props.onPress(props.item)}>
             <Ionicons name={props.selected ? 'checkbox' : 'square-outline'} size={24} color={props.selected ? config.primaryColor : '#333'} />
             <View style={{marginLeft: 10}}>
-                <P style={{fontWeight: 'bold'}}>{props.item.name}</P>
-                <Sm style={{marginBottom: 0}}>{props.item.address}</Sm>
+                <P style={{fontWeight: 'bold'}}>{props.item.first_name} {props.item.last_name}</P>
+                <Sm style={{marginBottom: 0}}>{props.item.shipping_address}</Sm>
             </View>
         </ListItem>
     );
-	
+
 }

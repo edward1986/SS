@@ -15,7 +15,6 @@ type RootStackParamList = {
   Home: undefined;
   App: undefined;
   Drawer: undefined;
-  Cab: undefined;
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

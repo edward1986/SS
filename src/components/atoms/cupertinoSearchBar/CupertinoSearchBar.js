@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component, useMemo} from "react";
 import {StyleSheet, View, TouchableOpacity, TextInput, Image} from "react-native";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MenuLeft from "../../../../assets/svg/menu";
@@ -9,15 +9,28 @@ import {RootStateOrAny, useSelector} from "react-redux";
 function CupertinoSearchBar(props) {
   const {  top: paddingTop } = useSafeArea();
   const addToCartLength = useSelector((state: RootStateOrAny) => state.product?.addToCartLength);
+  const getActiveRouteState = function (route) {
+    if (!route.routes || route.routes.length === 0 || route.routes.index >= route.routes.length) {
+      return route;
+    }
+    const childActiveRoute = route.routes[route.index]
+    return getActiveRouteState(childActiveRoute);
+
+  }
+  const getActiveRoute =   getActiveRouteState(props.navigation.getState())
+  const getActiveRouteMemo = useMemo(() =>
+      getActiveRoute?.state?.routes?.[getActiveRoute?.state?.index]?.name,
+      [getActiveRoute?.state?.routes?.[getActiveRoute?.state?.index]?.name])
+
   return (
-    <View style={[styles.container, {paddingTop},   props.style]}>
+    <View style={[styles.container, {paddingTop,  backgroundColor:  getActiveRouteMemo === "Notification" ? "rgba(0,0,0,0)" : "#AFB8A7",},   props.style]}>
       <TouchableOpacity onPress={props.onPress} style={styles.leftIconButton}>
         <MenuLeft
           name="subdirectory-arrow-right"
           style={styles.leftIcon}
         ></MenuLeft>
       </TouchableOpacity>
-      <View style={styles.inputBox}>
+      {getActiveRouteMemo !== "Notification" ? <View style={styles.inputBox}>
         <MaterialCommunityIconsIcon
           name="magnify"
           style={styles.inputLeftIcon}
@@ -32,14 +45,14 @@ function CupertinoSearchBar(props) {
           name="close-circle"
           style={styles.inputRightIcon}
         ></MaterialCommunityIconsIcon>
-      </View>
+      </View> : <></>}
 
-      <TouchableOpacity onPress={props.onRightPress} style={styles.rightIconButton}>
+      {getActiveRouteMemo !== "Notification" ?<TouchableOpacity onPress={props.onRightPress} style={styles.rightIconButton}>
 
         <Badge text={addToCartLength }>
           <Image style={{width: 44, height: 44}} source={require("./../../../../assets/trucks.png")}/>
         </Badge>
-      </TouchableOpacity>
+      </TouchableOpacity>: <></>}
     </View>
   );
 }
@@ -48,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#AFB8A7",
+
   },
   leftIconButton: {
     padding: 8

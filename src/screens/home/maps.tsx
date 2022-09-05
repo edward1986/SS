@@ -16,7 +16,8 @@ import markerPin from "../../../assets/svg/markerPin";
 const LOCATION_TASK_NAME = 'LOCATION_TASK_NAME';
 let foregroundSubscription = null;
 import firebase from "../../services/config";
-import {RootStateOrAny, useSelector} from "react-redux";
+import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
+import {setDrawerVisible} from "../../reducers/drawer/actions";
 // Define the background task for location tracking
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({data, error}) => {
     if (error) {
@@ -34,12 +35,13 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({data, error}) => {
 });
 
 export default function Maps() {
+    const dispatch = useDispatch();
     const user = useSelector((state:RootStateOrAny) => state.user);
     const [mapCenterPosition, setMapCenterPosition] = useState({
         lat: 8.4785442,
         lng: 124.6524561,
     });
-const [dataSource, setDataSource] = useState([])
+    const [dataSource, setDataSource] = useState([])
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -191,73 +193,73 @@ const [dataSource, setDataSource] = useState([])
     }, [mapCenterPosition])
 
     return (
-                <View style={{ height: "100%" }}>
-                    <View style={{position: "absolute", width: "100%", bottom: 50,  zIndex: 1, justifyContent: "center", alignItems: "center"}}>
-                        <View style={{ justifyContent: "center", alignItems: "center"}}>
-                            <TouchableOpacity onPress={startForegroundUpdate}>
-                                <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: "#7B896E", borderRadius: 10}}>
-                                    <Text style={{ fontWeight: "bold",  color: "#fff"}}>Get Location</Text>
-                                </View>
-
-                            </TouchableOpacity>
+        <View style={{ height: "100%" }}>
+            <View style={{position: "absolute", width: "100%", bottom: 50,  zIndex: 1, justifyContent: "center", alignItems: "center"}}>
+                <View style={{ justifyContent: "center", alignItems: "center"}}>
+                    <TouchableOpacity onPress={startForegroundUpdate}>
+                        <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: "#7B896E", borderRadius: 10}}>
+                            <Text style={{ fontWeight: "bold",  color: "#fff"}}>Get Location</Text>
                         </View>
 
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <ExpoLeaflet
-
-                            loadingIndicator={()=><View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center", zIndex: 1, position: "absolute", }}>
-                                <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
-                                   <ActivityIndicator/>
-                                </View>
-                            </View>}
-
-                            onMapLoad={()=> {
-                                console.log("onMapLoad")
-                            }  }
-                            backgroundColor={"#E4E3DF"}
-                            onMessage={(message) => {
-                            }}
-                            mapLayers={[
-                                {
-
-                                    attribution:
-                                        '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                                    baseLayerIsChecked: true,
-                                    baseLayerName: "OpenStreetMap.Mapnik",
-                                    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                },
-                            ]}
-
-                            mapMarkers={[...dataSource.map(value => {
-                                return {
-                                    id: value.key,
-                                    position: {
-                                        lat: value?.lat || 0,
-                                        lng: value?.lng || 0,
-                                    },
-                                    icon: pin,
-                                    size: [32, 32],
-
-                                }
-                            }),
-                                {
-                                    id: "1",
-                                    position: {
-                                        lat: positionMemo?.latitude || 0,
-                                        lng: positionMemo?.longitude || 0,
-                                    },
-                                    icon: pin,
-                                    size: [32, 32],
-
-                                },
-                            ]}
-
-                            mapCenterPosition={mapCenterPositionMemo}
-                            zoom={15}
-                        />
-                    </View>
+                    </TouchableOpacity>
                 </View>
+
+            </View>
+            <View style={{ flex: 1 }}>
+                <ExpoLeaflet
+
+                    loadingIndicator={()=><View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center", zIndex: 1, position: "absolute", }}>
+                        <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
+                            <ActivityIndicator/>
+                        </View>
+                    </View>}
+
+                    onMapLoad={()=> {
+                        console.log("onMapLoad")
+                    }  }
+                    backgroundColor={"#E4E3DF"}
+                    onMessage={(message) => {
+                    }}
+                    mapLayers={[
+                        {
+
+                            attribution:
+                                '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                            baseLayerIsChecked: true,
+                            baseLayerName: "OpenStreetMap.Mapnik",
+                            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        },
+                    ]}
+
+                    mapMarkers={[...dataSource.map(value => {
+                        return {
+                            id: value.key,
+                            position: {
+                                lat: value?.lat || 0,
+                                lng: value?.lng || 0,
+                            },
+                            icon: pin,
+                            size: [32, 32],
+
+                        }
+                    }),
+                        {
+                            id: "1",
+                            position: {
+                                lat: positionMemo?.latitude || 0,
+                                lng: positionMemo?.longitude || 0,
+                            },
+                            icon: pin,
+                            size: [32, 32],
+
+                        },
+                    ]}
+
+                    mapCenterPosition={mapCenterPositionMemo}
+                    zoom={15}
+                />
+            </View>
+        </View>
     );
 }
 

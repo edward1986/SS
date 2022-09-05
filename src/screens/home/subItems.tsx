@@ -17,9 +17,10 @@ import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
 import {BASE_URL} from "../../services/config";
 import {setAddToCart, setProducts} from "../../reducers/product/actions";
 import Text from '../../components/atoms/text'
+import {PICKUP} from "../../reducers/product/initialstate";
 
 const SubItems = (props) => {
-    const token = useSelector((state: RootStateOrAny) => state.user?.user?.token?.token);
+    const token = useSelector((state: RootStateOrAny) => state.user?.token?.token);
     const products = useSelector((state: RootStateOrAny) => state.product?.products);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -34,11 +35,11 @@ const SubItems = (props) => {
 
     useEffect(() => {
         return fetchProducts()
-    }, [])
+    }, [products.length == 0])
 
     const fetchProducts = () => {
         setLoading(true);
-        axios.get(BASE_URL + "/api/products?page=" + page, {
+        axios.get(BASE_URL + "/api/products?page=" + page + "&category_id=" + props.route.params.id, {
             headers: {
                 Authorization: "Bearer ".concat(token)
             }
@@ -53,15 +54,13 @@ const SubItems = (props) => {
             Toast.show({
                 type: 'error', text1: response.message,
             })
-            console.log(response.message)
         })
     }
     const [dimension1Input, setDimension1Input] = useState('')
     const [dimension2Input, setDimension2Input] = useState('')
     const [quantity, setQuantity] = useState('')
     const AddToCart = (item) =>  {
-        console.log(item)
-            dispatch(setAddToCart(item))
+        dispatch(setAddToCart(item))
     }
 
     return (<View style={{flex: 1, backgroundColor: "#E4E3DF"}}>
@@ -85,7 +84,6 @@ const SubItems = (props) => {
                 numColumns={2}
                 renderItem={(props) => CardWithTextOverImage({
                     item: props.item, onPress: () => {
-                        console.log(props.item)
                         setItem(props.item)
                         setModalVisible(true)
                     }
@@ -150,7 +148,7 @@ const SubItems = (props) => {
                             </View>
 
                             <View style={{paddingTop: 30}} >
-                                <Button onPress={() => AddToCart({quantity, dimension1Input, dimension2Input, ...item})} borderRadius={6} title={"Add to Cab"}></Button>
+                                <Button onPress={() => AddToCart({quantity, dimension1Input, dimension2Input, ...item, check: true, deliveryMode: PICKUP, addressId: ''})} borderRadius={6} title={"Add to Cab"}></Button>
                             </View>
                         </View>
 

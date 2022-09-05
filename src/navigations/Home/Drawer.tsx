@@ -179,7 +179,7 @@ const Drawer = createDrawerNavigator();
                 headerShown: true,
                 header: ({navigation}) => {
 
-                    return <CupertinoSearchBar onRightPress={()=>navigation.navigate('Cab')} onPress={()=> navigation.toggleDrawer()} />
+                    return <CupertinoSearchBar navigation={navigation} onRightPress={()=>navigation.navigate('Cab', {screen: "Cab"})} onPress={()=> navigation.toggleDrawer()} />
 
                 }
             }}  useLegacyImplementation={true}  initialRouteName="RNHome">

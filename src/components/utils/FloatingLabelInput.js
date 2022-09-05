@@ -1,18 +1,22 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {View, TextInput, Text} from "react-native";
 import config from '../../config';
+import {InputField} from "../molecules/form-fields";
+import {errorColor} from "../../styles/color";
 
-export default class FloatingLabelInput extends React.Component {
-    
+class FloatingLabelInput extends React.Component {
+
     state = {
         isFocused: false
     };
-
-    handleFocus = () => this.setState({isFocused: true});
+    textInputRef = null
+    handleFocus = () => {
+        this.setState({isFocused: true});
+    }
     handleBlur = () => this.setState({isFocused: false});
 
     render() {
-        const {label, ...props } = this.props;
+        const {label, hasError, ...props } = this.props;
         const {isFocused} = this.state;
         const labelStyle = {
             position: 'absolute',
@@ -22,14 +26,20 @@ export default class FloatingLabelInput extends React.Component {
             fontFamily: config.defaultFont,
             fontWeight: 'bold',
         };
+
+
+
         return (
             <View style={{paddingTop: 15, marginBottom: 15, width: '100%'}}>
                 <Text style={labelStyle}>
                     {label}
                 </Text>
-                <TextInput
-
-
+                <InputField
+                    outlineStyle={{borderColor: "rgba(0,0,0,0)"}}
+                    errorColor={errorColor}
+                    hasValidation={!!hasError}
+                    error={hasError}
+                    {...props}
                     style={[{
                         borderRadius: 5,
                     height: 35,
@@ -40,12 +50,15 @@ export default class FloatingLabelInput extends React.Component {
                     fontWeight: 'bold',
                     fontFamily: config.defaultFont
                 }, props.inputStyle]}
-                    {...props}
+
                     textBreakStrategy={'simple'}
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}/>
-                    
+
             </View>
         );
     }
 }
+
+
+export default (FloatingLabelInput)

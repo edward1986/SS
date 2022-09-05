@@ -17,7 +17,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 
-const BASE_URL = 'http://192.168.254.157:8000';
+const BASE_URL = 'http://192.168.0.100:8000';
 export { firebase as default };
 export {
   BASE_URL

@@ -2,6 +2,7 @@ import React, { ReactNode, FC } from 'react';
 import { StyleSheet, Text as RNText } from 'react-native';
 import {Poppins_400Regular} from "@expo-google-fonts/poppins";
 import {Regular} from "../../../styles/fonts";
+import config from "../../../config";
 
 const styles = StyleSheet.create({
   default: {

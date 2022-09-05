@@ -6,16 +6,16 @@ import {
 import { Wrapper, Container, Space, H3, P, Btn } from '../utils';
 import {Ionicons} from "@expo/vector-icons";
 
-export default class ThankYou extends React.Component {
+export default class OrderConfirm extends React.Component {
 
 	state = {};
 
 	render() {
 
 		return (
-			
+
 			<Wrapper>
-				
+
                 <Container>
 
 					<View style={{alignItems: 'center', flex: 1, marginTop: 150}} >

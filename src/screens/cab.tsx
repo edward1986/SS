@@ -4,12 +4,19 @@ import Text from "../components/atoms/text"
 import {Bold} from "../styles/fonts";
 import TrashIcon from "../../assets/svg/trashicon";
 import {Checkbox} from "../components/utils";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
-import {setCartItemDecrement, setCartItemIncrement} from "../reducers/product/actions";
+import {
+    setCartItemCheck,
+    setCartItemDecrement,
+    setCartItemDelete, setCartItemDelivery,
+    setCartItemIncrement, setCartItemPickup
+} from "../reducers/product/actions";
+import {DELIVERY} from "../reducers/product/initialstate";
+import {setDrawerVisible} from "../reducers/drawer/actions";
 
-function Item(props: { onPress: () => void, cart }) {
-    const [check, setCheck] = useState(false)
+function Item(props: { onPress: () => void, cart, onCheck }) {
+    const [check, setCheck] = useState(true)
     const cart = useMemo(() => props.cart, [])
 const dispatch =  useDispatch()
     function decrement() {
@@ -18,6 +25,14 @@ const dispatch =  useDispatch()
     function increment() {
         dispatch(setCartItemIncrement(cart))
     }
+
+    function deleteItem() {
+        dispatch(setCartItemDelete(cart))
+    }
+
+    const  onChecked = () => {
+        dispatch(setCartItemCheck(cart))
+    };
     return <View style={{borderRadius: 5, marginBottom: 18, backgroundColor: "#E5E5E5"}}>
         <View
             style={{flexDirection: "row", justifyContent: "space-between", paddingLeft: 25, paddingRight: 9, paddingVertical: 14}}>
@@ -56,18 +71,34 @@ const dispatch =  useDispatch()
                 </TouchableOpacity>
             </View>
             <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-                <View style={{paddingRight: 7}}>
-                    <TrashIcon/>
-                </View>
-                <Checkbox selected={check} onPress={()=> setCheck(check => !check)}/>
+                <TouchableOpacity onPress={deleteItem}>
+                    <View style={{paddingRight: 7}}>
+                        <TrashIcon/>
+                    </View>
+                </TouchableOpacity>
+
+                <Checkbox selected={cart.check} onPress={onChecked}/>
             </View>
         </View>
     </View>;
 }
 
 const Cab = ({navigation}) => {
-    const [deliveryMode, setDeliveryMode] = useState('')
     const addToCart = useSelector((state: RootStateOrAny) => state.product?.addToCart);
+    const deliveryMode = useSelector((state: RootStateOrAny) => state.product?.deliveryMode);
+
+
+    const dispatch =  useDispatch()
+    const onPickup = () => {
+        dispatch(setCartItemPickup( ))
+
+
+    };
+    const onDelivery= () => {
+
+
+        dispatch(setCartItemDelivery( ))
+    };
     return (
         <ScrollView>
             <View style={{paddingHorizontal: 27,}}>
@@ -81,8 +112,9 @@ const Cab = ({navigation}) => {
                         <Text style={{fontFamily: Bold}}>Products</Text>
                     </View>
                     {
-                        addToCart.map((cart) => {
-                            return  <Item cart={cart} onPress={() => {}}/>
+                        addToCart.map((cart, index) => {
+
+                            return  <Item key={index} cart={cart} onPress={() => {}}/>
                         })
 
                     }
@@ -90,7 +122,7 @@ const Cab = ({navigation}) => {
                     <View style={{alignItems: "flex-end", }}>
                         <View style={{flexDirection: "row", justifyContent: "center"}}>
                             <Text style={{fontSize: 16, fontFamily: Bold}}>TOTAL PRICE: </Text>
-                            <Text style={{fontSize: 16}}>₱ 1932.00</Text>
+                            <Text style={{fontSize: 16}}>₱ {addToCart.reduce((partialSum, a) => partialSum + (a.check ? (((+a.quantity) * (+a.price) ) || 0) : 0), 0)}</Text>
                         </View>
                     </View>
 
@@ -98,16 +130,16 @@ const Cab = ({navigation}) => {
 
                 <View style={{marginVertical: 13, flexDirection: "row", padding: 15, justifyContent: "space-between", backgroundColor: "#D9D9D9"}}>
                     <View style={{flexDirection: "row"}}>
-                        <Checkbox size={23} selected={deliveryMode == "pickup"} onPress={()=> { deliveryMode == "pickup" ? setDeliveryMode("") : setDeliveryMode("pickup") }}/>
+                        <Checkbox size={23} selected={deliveryMode == "pickup"} onPress={onPickup}/>
                         <Text>Pick up</Text>
                     </View>
                     <View style={{flexDirection: "row"}}>
-                        <Checkbox size={23} selected={deliveryMode == "delivery"} onPress={()=> { deliveryMode == "delivery" ? setDeliveryMode("") : setDeliveryMode("delivery") }}/>
+                        <Checkbox size={23} selected={deliveryMode == "delivery"} onPress={onDelivery}/>
                         <Text>Delivery</Text>
                     </View>
                 </View>
                 <View style={{paddingBottom: 10}}>
-                    <TouchableOpacity onPress={()=> navigation.navigate('Address')}>
+                    <TouchableOpacity onPress={()=> navigation.navigate('Address' )}>
                         <View style= {{  justifyContent: "center", alignItems: "flex-end",}}>
                             <View style={{borderRadius: 6,backgroundColor: "#B8B89C" }}>
                                 <Text style={{ paddingHorizontal: 15, paddingVertical: 10}}>Continue</Text>
