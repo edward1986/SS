@@ -23,7 +23,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "SpareSquare"
     },
-
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
@@ -37,7 +36,11 @@
     },
     "plugins": [
       "expo-build-properties"
-
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "58629066-1409-432e-86b9-b92013ddb8c7"
+      }
+    }
   }
 }
