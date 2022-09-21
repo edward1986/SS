@@ -1,26 +1,49 @@
 import * as React from 'react';
 import {View, Text, FlatList, TouchableOpacity} from "react-native";
-import {useDispatch} from "react-redux";
+import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
 import BellIcon from "../../../assets/svg/bellIcon";
 import {Bold} from "../../styles/fonts";
+import {useEffect, useMemo, useState} from "react";
+import axios from "axios";
+import {setCategories} from "../../reducers/category/actions";
+import Toast from "react-native-toast-message";
+import {BASE_URL} from "../../services/config";
+import {setBlogs} from "../../reducers/blog/actions";
+import ListEmptyComponent from "../../components/atoms/listEmpty";
 
 
 
 const Notifications = (props) => {
     const dispatch = useDispatch();
-
-    const blogs = [
-        {
-            id: 1,
-            title: "title",
-            description: "article description"
-        },
-        {
-            id: 2,
-            title: "title",
-            description: "article description"
-        },
-    ]
+    const token = useSelector((state: RootStateOrAny) => state.user?.token?.token);
+    const blogs = useSelector((state: RootStateOrAny) => state.blog.blogs);
+    const [page, setPage] = useState(1);
+    const blogsMemo = useMemo(() => {
+        return blogs
+    }, [blogs])
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        return fetchCategories()
+    }, [blogs.length == 0])
+    const fetchCategories = () => {
+        setLoading(true);
+        axios.get(BASE_URL + "/api/blogs?page=" + page, {
+            headers: {
+                Authorization: "Bearer ".concat(token)
+            }
+        }).then((response) => {
+            dispatch(setBlogs(response.data.data))
+            setLoading(false);
+            if (response.data.last_page != page) {
+                setPage(page + 1);
+            }
+        }).catch((response) => {
+            Toast.show({
+                type: 'error',
+                text1: response.message,
+            })
+        })
+    }
 
     const _renderItem =({item}) => {
         return   <View style={{paddingVertical: 12,}}>
@@ -44,13 +67,14 @@ const Notifications = (props) => {
                         height={(81)}/>
               <Text style={{fontSize: 16, fontFamily: Bold}}>Blogs</Text>
           </View>
-          <View style={{paddingHorizontal: 17, }}>
+          <View style={{paddingHorizontal: 17, flex: 1 }}>
 
               <FlatList
-                  data={blogs}
+                  ListEmptyComponent={ListEmptyComponent}
+                  data={blogsMemo}
+                    contentContainerStyle={{flexGrow: 1}}
                   renderItem={_renderItem}
               />
-
 
           </View>
 

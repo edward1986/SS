@@ -100,59 +100,44 @@ const RegistrationForm : FC<Props> = ({ formValue = {}, onChangeText = () => {} 
   return (
     <View style={styles.container}>
       <InputField
-        inputStyle={InputStyles.text}
-        label={'Username'}
-        placeholder="Username"
-        required={true}
-        hasValidation={true}
-        outlineStyle={InputStyles.outlineStyle}
-        activeColor={text.primary}
-        errorColor={text.error}
-        error={formValue?.username?.error}
-        requiredColor={text.error}
-        value={formValue?.username?.value}
-        onChangeText={(value: string) => onChangeText('username', value)}
-        onSubmitEditing={(event:any) => onChangeText('username', event.nativeEvent.text)}
+          inputStyle={InputStyles.text}
+          label={'Enter your email'}
+          placeholder="Enter your email"
+          required={true}
+          hasValidation={true}
+          outlineStyle={InputStyles.outlineStyle}
+          activeColor={text.primary}
+          errorColor={text.error}
+          requiredColor={text.error}
+          error={formValue?.email?.error}
+          value={formValue?.email?.value}
+          keyboardType={'email-address'}
+          onChangeText={(value: string) => onChangeText('email', value)}
+          onSubmitEditing={(event:any) => onChangeText('email', event.nativeEvent.text)}
+      />
+
+      <InputField
+          inputStyle={InputStyles.text}
+          label={'Enter your full  name'}
+          placeholder="Enter your full  name"
+          required={true}
+          hasValidation={true}
+          outlineStyle={InputStyles.outlineStyle}
+          activeColor={text.primary}
+          errorColor={text.error}
+          requiredColor={text.error}
+          error={formValue?.name?.error}
+          value={formValue?.name?.value}
+          onChangeText={(value: string) => onChangeText('name', value)}
+          onSubmitEditing={(event:any) => onChangeText('name', event.nativeEvent.text)}
       />
       <InputField
         inputStyle={InputStyles.text}
-        label={'Email'}
-        placeholder="Email address"
-        required={true}
-        hasValidation={true}
-        outlineStyle={InputStyles.outlineStyle}
-        activeColor={text.primary}
-        errorColor={text.error}
-        requiredColor={text.error}
-        error={formValue?.email?.error}
-        value={formValue?.email?.value}
-        keyboardType={'email-address'}
-        onChangeText={(value: string) => onChangeText('email', value)}
-        onSubmitEditing={(event:any) => onChangeText('email', event.nativeEvent.text)}
-      />
-      <InputField
-        inputStyle={InputStyles.text}
-        label={'Phone'}
-        placeholder="Phone number"
-        required={true}
-        hasValidation={true}
-        outlineStyle={InputStyles.outlineStyle}
-        activeColor={text.primary}
-        errorColor={text.error}
-        requiredColor={text.error}
-        error={formValue?.phone?.error}
-        value={formValue?.phone?.value}
-        keyboardType={'phone-pad'}
-        onChangeText={(value: string) => onChangeText('phone', value)}
-        onSubmitEditing={(event:any) => onChangeText('phone', event.nativeEvent.text)}
-      />
-      <InputField
-        inputStyle={InputStyles.text}
-        label={'Password'}
-        placeholder="Password"
+        label={'Enter your password'}
+        placeholder="Enter your password"
         textContentType="oneTimeCode"
         required={true}
-        hasValidation={false}
+        hasValidation={true}
         outlineStyle={InputStyles.outlineStyle}
         activeColor={text.primary}
         errorColor={text.error}
@@ -163,80 +148,9 @@ const RegistrationForm : FC<Props> = ({ formValue = {}, onChangeText = () => {} 
         onChangeText={(value: string) => onChangeText('password', value)}
         onSubmitEditing={(event:any) => onChangeText('password', event.nativeEvent.text)}
       />
-      <View style={{ marginBottom: 20, marginTop: 5 }}>
-        <Text
-          style={InputStyles.text}
-          size={12}
-          color={text.default}
-        >
-          Your password must have:
-        </Text>
-        <View style={styles.passwordValidationContainer}>
-          <View style={styles.horizontal}>
-            {validateIcon(formValue?.password?.characterLength)}
-            <Text
-              style={styles.label}
-              size={12}
-              color={validateColor(formValue?.password?.characterLength)}
-            >
-              8 or more characters
-            </Text>
-          </View>
-          <View style={styles.horizontal}>
-            {validateIcon(formValue?.password?.upperAndLowerCase)}
-            <Text
-              style={styles.label}
-              size={12}
-              color={validateColor(formValue?.password?.upperAndLowerCase)}
-            >
-              Uppercase and lowercase letters
-            </Text>
-          </View>
-          <View style={styles.horizontal}>
-            {validateIcon(formValue?.password?.atLeastOneNumber)}
-            <Text
-              style={styles.label}
-              size={12}
-              color={validateColor(formValue?.password?.atLeastOneNumber)}
-            >
-              At least one number
-            </Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <Text
-            style={[InputStyles.text, { fontWeight: '600' }]}
-            size={12}
-            color={text.default}
-          >
-            Strength:
-          </Text>
-          <Text
-            style={[InputStyles.text,
-              {
-                fontWeight: '600',
-                color: passwordMeterColor(formValue?.password?.strength),
-              }
-            ]}
-            size={12}
-          >
-            {` ${formValue?.password?.strength || 'Weak'}`}
-          </Text>
-        </View>
-        <View style={styles.horizontal}>
-          <View
-            style={[
-              styles.strengthBar,
-              {
-                backgroundColor: passwordMeterColor(formValue?.password?.strength)
-              }]
-            }
-          />
-        </View>
-      </View>
       <InputField
         inputStyle={InputStyles.text}
-        label={'Confirm'}
+        label={'Confirm password'}
         placeholder="Confirm password"
         textContentType="oneTimeCode"
         required={true}
@@ -251,17 +165,7 @@ const RegistrationForm : FC<Props> = ({ formValue = {}, onChangeText = () => {} 
         onChangeText={(value: string) => onChangeText('confirmPassword', value)}
         onSubmitEditing={(event:any) => onChangeText('confirmPassword', event.nativeEvent.text)}
       />
-      <View style={[styles.horizontal, { marginTop: 20 }]}>
-        <TouchableOpacity onPress={() => onChangeText('showPassword', !formValue?.showPassword?.value)}>
-          {renderPasswordChecker(formValue?.showPassword?.value)}
-        </TouchableOpacity>
-        <Text
-          style={[InputStyles.text, styles.label]}
-          size={14}
-        >
-          Show password
-        </Text>
-      </View>
+
     </View>
   );
 };

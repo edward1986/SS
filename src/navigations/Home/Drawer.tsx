@@ -5,7 +5,7 @@ import Settings from "./../../screens/home/settings";
 import CupertinoSearchBar from "../../components/atoms/cupertinoSearchBar/CupertinoSearchBar";
 import {RootStateOrAny, useDispatch, useSelector} from "react-redux";
 import {useCallback, useState} from "react";
-import {setUser} from "../../reducers/user/actions";
+import {setReset, setUser} from "../../reducers/user/actions";
 import CabNavigator from "./CabNavigator";
 
 import {CommonActions,DrawerActions} from "@react-navigation/native";
@@ -21,7 +21,7 @@ const Drawer = createDrawerNavigator();
  const DrawerNavigator =(props) => {
      const dispatch = useDispatch();
      const onLogout = useCallback(() => {
-         dispatch(setUser({}));
+         dispatch(setReset({}));
          setTimeout(() => {
              props.navigation.replace('Login');
          }, 100);

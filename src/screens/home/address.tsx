@@ -44,7 +44,7 @@ const Address = (props) =>{
     const addressId = useSelector((state: RootStateOrAny) => state.product?.addressId);
     const [page, setPage] = useState(1);
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(true);
+        const [loading, setLoading] = useState(true);
     const addressesMemo = useMemo(() => {
         return addresses
     }, [addresses])
@@ -66,6 +66,7 @@ const Address = (props) =>{
                 setPage(page + 1);
             }
         }).catch((response) => {
+            console.log(response.response)
             Toast.show({
                 type: 'error', text1: response.message,
             })

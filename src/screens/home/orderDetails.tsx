@@ -33,8 +33,7 @@ import axios from "axios";
 import {BASE_URL} from "../../services/config";
 import Toast from "react-native-toast-message";
 import useLocation from "../../hooks/useLocation";
-import {setDrawerVisible} from "../../reducers/drawer/actions";
-import {setAddToCart, setEmptyCart} from "../../reducers/product/actions";
+import { setEmptyCart} from "../../reducers/product/actions";
 
 
 const OrderDetail = (props) => {

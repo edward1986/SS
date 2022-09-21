@@ -13,6 +13,7 @@ import CupertinoSearchBar from "../../components/atoms/cupertinoSearchBar/Cupert
 import Drawer from "./Drawer";
 import Stack from "./Stack";
 import BlogNavigator from "./BlogStack";
+import ProfileStack from "./ProfileStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -128,7 +129,7 @@ const HomeNavigator = () => {
             <Tab.Screen name="Home" component={Stack}/>
             <Tab.Screen name="Notification" component={BlogNavigator}/>
             <Tab.Screen name="Maps" component={Maps}/>
-            <Tab.Screen name="Profile" component={Profile}/>
+            <Tab.Screen name="Profile" component={ProfileStack}/>
         </Tab.Navigator>
     );
 };

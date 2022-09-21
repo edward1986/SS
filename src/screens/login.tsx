@@ -28,34 +28,7 @@ import {StackActions} from "@react-navigation/native";
 import LogoText from "../../assets/svg/logoText";
 const logo = require('../../assets/logo.png');
 const background = require('../../assets/background.png');
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  header: {
-    marginBottom: "10%",
-  },
-  image: {
-    height: 196,
-    width: 140,
-
-  },
-  formContainer: {
-
-  },
-  footer: {
-    marginTop: "10%",
-    marginBottom: "10%",
-  },
-  button: {
-    borderRadius: 5,
-  },
-  horizontal: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});
+import styles from "../styles/auth";
 
 const errorResponse = {
   email: 'Please enter a valid email address',

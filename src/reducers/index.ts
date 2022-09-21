@@ -7,6 +7,7 @@ import category from './category/reducers';
 import product from './product/reducers';
 import address from './address/reducers';
 import drawer from './drawer/reducers';
+import blog from './blog/reducers';
 
 const persistConfig = {
   key: 'root',
@@ -19,5 +20,6 @@ export default combineReducers({
   category,
   product,
   address,
-  drawer
+  drawer,
+  blog
 });
